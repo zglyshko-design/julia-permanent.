@@ -13,9 +13,10 @@
         .gold-border { border-color: #d4af37; }
         .hero-bg { background-image: radial-gradient(circle at center, #1a1a1a 0%, #000000 100%); }
         
-        /* ГАРАНТІЯ того, що вікно EasyWeek буде закриватися та працювати поверх усього */
-        #easyweek-widget-container, .ew-widget-modal, .ew-widget-iframe { 
-            z-index: 9999999 !important; 
+        /* Гарантія того, що вікно EasyWeek буде вище за все і клікабельним */
+        #easyweek-widget-container, .ew-widget-modal, .ew-widget-iframe, .ew-widget-overlay { 
+            z-index: 99999999 !important; 
+            pointer-events: auto !important;
         }
     </style>
 </head>
@@ -38,7 +39,7 @@
             Підкресліть свою <br><span class="gold-text">природну красу</span>
         </h1>
         <p class="max-w-xl mx-auto text-gray-400 font-light mb-10 text-lg">Професійний перманентний макіяж.</p>
-        <a href="#order" class="gold-bg text-black px-12 py-4 rounded-sm font-bold uppercase tracking-widest hover:brightness-110 transition inline-block">Отримати дзвінок</a>
+        <button class="open-calendar gold-bg text-black px-12 py-4 rounded-sm font-bold uppercase tracking-widest hover:brightness-110 transition inline-block">Отримати консультацію</button>
     </header>
 
     <section id="services" class="py-20 px-6 max-w-7xl mx-auto">
@@ -49,21 +50,21 @@
                 <h3 class="text-xl font-bold mb-2 uppercase tracking-widest">Брови</h3>
                 <p class="text-gray-500 text-[9px] mb-8 uppercase tracking-[0.2em]">Пудрове напилення / Волоскова техніка</p>
                 <div class="text-4xl gold-text font-bold mb-10">1600 грн</div>
-                <button onclick="ewWidget.open()" class="border border-gray-700 px-10 py-2 text-[10px] uppercase tracking-[0.2em] hover:gold-border hover:gold-text transition font-bold">Обрати</button>
+                <button class="open-calendar border border-gray-700 px-10 py-2 text-[10px] uppercase tracking-[0.2em] hover:gold-border hover:gold-text transition font-bold">Обрати</button>
             </div>
 
             <div class="bg-zinc-900/50 p-10 border-t-2 gold-border flex flex-col items-center">
                 <h3 class="text-xl font-bold mb-2 uppercase tracking-widest">Губи</h3>
                 <p class="text-gray-500 text-[9px] mb-8 uppercase tracking-[0.2em]">Акварельна / Помадна техніка</p>
                 <div class="text-4xl gold-text font-bold mb-10">1600 грн</div>
-                <button onclick="ewWidget.open()" class="border border-gray-700 px-10 py-2 text-[10px] uppercase tracking-[0.2em] hover:gold-border hover:gold-text transition font-bold">Обрати</button>
+                <button class="open-calendar border border-gray-700 px-10 py-2 text-[10px] uppercase tracking-[0.2em] hover:gold-border hover:gold-text transition font-bold">Обрати</button>
             </div>
 
             <div class="bg-zinc-900/50 p-10 border-t-2 gold-border flex flex-col items-center">
                 <h3 class="text-xl font-bold mb-2 uppercase tracking-widest">Міжвійка</h3>
                 <p class="text-gray-500 text-[9px] mb-8 uppercase tracking-[0.2em]">Ефект густих вій</p>
                 <div class="text-4xl gold-text font-bold mb-10">1100 грн</div>
-                <button onclick="ewWidget.open()" class="border border-gray-700 px-10 py-2 text-[10px] uppercase tracking-[0.2em] hover:gold-border hover:gold-text transition font-bold">Обрати</button>
+                <button class="open-calendar border border-gray-700 px-10 py-2 text-[10px] uppercase tracking-[0.2em] hover:gold-border hover:gold-text transition font-bold">Обрати</button>
             </div>
 
         </div>
@@ -89,6 +90,33 @@
         &copy; 2026 JULIA PERMANENT MAKE UP
     </footer>
 
+    <script src="https://booking.easyweek.com.ua/widget.js"></script>
+    <script>
+        // Створюємо віджет
+        var ewWidget = new EasyWeekWidget({
+            url: 'https://booking.easyweek.com.ua/julia-permanent-2', 
+            button: { 
+                text: 'Записатися онлайн', 
+                showText: true, 
+                color: '#0d0c0c', 
+                background: '#ffc716'
+            }
+        });
+
+        // ФУНКЦІЯ ДЛЯ КНОПОК "ОБРАТИ"
+        document.addEventListener('DOMContentLoaded', function() {
+            const btns = document.querySelectorAll('.open-calendar');
+            btns.forEach(btn => {
+                btn.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    if (typeof ewWidget !== 'undefined') {
+                        ewWidget.open();
+                    }
+                });
+            });
+        });
+    </script>
+
     <script>
         const TOKEN = "8798396196:AAE-eJMEixuDU66f0qrz2hWxmQIIIgPWabw";
         const CHAT_ID = "629701791";
@@ -113,27 +141,12 @@
                     status.className = "mt-6 text-green-500 font-bold";
                     this.reset();
                 } else {
-                    status.innerText = "❌ Помилка. Зв'яжіться за номером.";
+                    status.innerText = "❌ Помилка.";
                     status.className = "mt-6 text-red-500 font-bold";
                 }
             })
             .finally(() => { btn.disabled = false; });
         });
-    </script>
-
-    <script src="https://booking.easyweek.com.ua/widget.js"></script>
-    <script>
-        var ewWidget = new EasyWeekWidget({
-            url: 'https://booking.easyweek.com.ua/julia-permanent-2', 
-            button: { 
-                text: 'Записатися онлайн', 
-                showText: true, 
-                color: '#0d0c0c', 
-                background: '#ffc716', 
-                textColor: '#ffc716', 
-                textBackground: '#0d0c0c' 
-            }
-        })
     </script>
 </body>
 </html>
